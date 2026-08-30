@@ -1,75 +1,218 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Eyes Protector - Smart Distance Alerts</title>
+  <title>Eyes Protector - Official App</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            appBg: '#12121A',
+            safeGreen: '#7BC9A5',
+            warningYellow: '#E5B96A',
+            dangerRed: '#E98282',
+            mainText: '#E8E6EE',
+            secondaryText: '#A7A3B3',
+          }
+        }
+      }
+    }
+  </script>
 </head>
-<body class="bg-slate-950 text-slate-100 antialiased min-h-screen flex flex-col justify-between">
+<body class="bg-appBg text-mainText font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-safeGreen selection:text-appBg">
 
-  <header class="p-6 max-w-5xl mx-auto w-full flex justify-between items-center">
-    <div class="flex items-center gap-2">
-      <span class="text-2xl">👁️</span>
-      <h1 class="text-xl font-bold tracking-wide">Eyes Protector</h1>
+  <!-- Header -->
+  <header class="p-6 max-w-6xl mx-auto w-full flex justify-between items-center border-b border-secondaryText/10">
+    <div class="flex items-center gap-3">
+      <!-- App Icon Image -->
+      <img src="app_icon.png" alt="Eyes Protector Icon" class="w-10 h-10 rounded-xl border border-safeGreen/30 shadow-md object-cover" onerror="this.src='app_icon.jpeg'" />
+      <h1 class="text-xl font-bold tracking-tight text-mainText">Eyes Protector</h1>
     </div>
-    <div class="bg-slate-900 border border-slate-800 text-slate-300 px-4 py-1.5 rounded-full text-xs font-mono">
-      Downloads: <span id="download-count" class="text-indigo-400 font-bold">...</span>
+
+    <div class="flex items-center gap-4">
+      <!-- Language Switcher Button -->
+      <button id="lang-btn" onclick="toggleLanguage()" class="bg-slate-900 border border-secondaryText/30 text-mainText px-3 py-1.5 rounded-lg text-xs font-semibold hover:border-safeGreen transition">
+        العربية
+      </button>
+
+      <!-- Download Counter -->
+      <div class="bg-slate-900/90 border border-secondaryText/20 px-4 py-1.5 rounded-full text-xs font-mono text-secondaryText shadow-md">
+        <span id="txt-counter">Downloads</span>: <span id="download-count" class="text-safeGreen font-bold">0</span>
+      </div>
     </div>
   </header>
 
-  <main class="max-w-3xl mx-auto px-6 py-16 text-center my-auto">
-    <h2 class="text-4xl sm:text-6xl font-extrabold tracking-tight mb-6">
-      Protect your eyes while using your phone.
+  <!-- Main Hero Section -->
+  <main class="max-w-5xl mx-auto px-6 py-12 text-center my-auto">
+    <!-- Center App Icon Header -->
+    <div class="inline-block p-2 bg-slate-900 border border-safeGreen/30 rounded-3xl mb-6 shadow-2xl">
+      <img src="app logo with title.png" alt="Eyes Protector" class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover" onerror="this.src='app_icon.jpeg'" />
+    </div>
+
+    <h2 id="txt-title" class="text-4xl sm:text-5xl font-extrabold text-mainText tracking-tight mb-4">
+      Protect Your Vision Every Day
     </h2>
-    <p class="text-slate-400 text-lg sm:text-xl max-w-xl mx-auto mb-10">
-      Eyes Protector monitors your screen viewing distance in real time and alerts you when you get too close, preventing eye strain effortlessly.
+    <p id="txt-subtitle" class="text-secondaryText text-base sm:text-lg max-w-lg mx-auto mb-8 leading-relaxed">
+      Smart distance alerts to prevent eye strain and maintain healthy screen viewing habits.
     </p>
 
+    <!-- Direct Download Button -->
     <a 
       id="download-btn"
       href="Eyes Protector poster teaser1.png" 
       download 
-      class="inline-flex items-center gap-3 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-lg px-8 py-4 rounded-2xl shadow-lg shadow-indigo-600/30 transition duration-200 transform hover:-translate-y-0.5 active:translate-y-0"
+      class="inline-flex items-center justify-center gap-3 bg-safeGreen hover:bg-safeGreen/90 text-appBg font-bold text-base sm:text-lg px-8 py-4 rounded-2xl shadow-xl shadow-safeGreen/10 transition duration-200 transform hover:-translate-y-0.5 active:translate-y-0 w-full sm:w-auto"
     >
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg class="w-6 h-6 text-appBg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
       </svg>
-      Download Direct APK
+      <span id="txt-download">Download Direct APK</span>
     </a>
+
+    <!-- Status Indicators -->
+    <div class="grid grid-cols-3 gap-3 max-w-md mx-auto mt-8 text-xs font-semibold">
+      <div id="txt-status-safe" class="p-2.5 bg-slate-900/60 border border-safeGreen/30 rounded-xl text-safeGreen">
+        Safe Distance
+      </div>
+      <div id="txt-status-warn" class="p-2.5 bg-slate-900/60 border border-warningYellow/30 rounded-xl text-warningYellow">
+        Warning Alert
+      </div>
+      <div id="txt-status-danger" class="p-2.5 bg-slate-900/60 border border-dangerRed/30 rounded-xl text-dangerRed">
+        Too Close
+      </div>
+    </div>
+
+    <!-- Screenshots Showcase Grid -->
+    <section class="mt-16 text-left">
+      <h3 id="txt-screenshots" class="text-xl font-bold text-mainText mb-6 text-center">App Screenshots</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div class="bg-slate-900/80 border border-secondaryText/20 p-2 rounded-2xl shadow-xl">
+          <img src="screenshot1.png" alt="Screenshot 1" class="rounded-xl w-full h-auto object-cover" onerror="this.src='screenshot1.jpg'" />
+        </div>
+        <div class="bg-slate-900/80 border border-secondaryText/20 p-2 rounded-2xl shadow-xl">
+          <img src="screenshot2.png" alt="Screenshot 2" class="rounded-xl w-full h-auto object-cover" onerror="this.src='screenshot2.jpg'" />
+        </div>
+        <div class="bg-slate-900/80 border border-secondaryText/20 p-2 rounded-2xl shadow-xl">
+          <img src="screenshot3.png" alt="Screenshot 3" class="rounded-xl w-full h-auto object-cover" onerror="this.src='screenshot3.jpg'" />
+        </div>
+        <div class="bg-slate-900/80 border border-secondaryText/20 p-2 rounded-2xl shadow-xl">
+          <img src="screenshot4.png" alt="Screenshot 3" class="rounded-xl w-full h-auto object-cover" onerror="this.src='screenshot3.jpg'" />
+        </div>
+        <div class="bg-slate-900/80 border border-secondaryText/20 p-2 rounded-2xl shadow-xl">
+          <img src="screenshot5.png" alt="Screenshot 3" class="rounded-xl w-full h-auto object-cover" onerror="this.src='screenshot3.jpg'" />
+        </div>
+        
+      </div>
+    </section>
   </main>
 
-  <footer class="py-6 text-center text-xs text-slate-600 border-t border-slate-900">
-    © 2026 Eyes Protector. Designed by ENIGM.
+  <!-- Footer -->
+  <footer class="py-6 text-center text-xs text-secondaryText/60 border-t border-secondaryText/10">
+    <span id="txt-footer">© 2026 Eyes Protector. Developed by Hassan Naweid.</span>
   </footer>
 
+  <!-- Scripts: Language Switcher & Persistent Counter -->
   <script>
-    // Replace with a unique workspace/key name for your app
-    const counterKey = "eyes_protector_apk_downloads_2026";
+    // --- 1. LANGUAGE TRANSLATIONS ---
+    let currentLang = 'en';
+    const translations = {
+      en: {
+        title: "Protect Your Vision Every Day",
+        subtitle: "Smart distance alerts to prevent eye strain and maintain healthy screen viewing habits.",
+        download: "Download Direct APK",
+        counter: "Downloads",
+        safe: "Safe Distance",
+        warn: "Warning Alert",
+        danger: "Too Close",
+        screenshots: "App Screenshots",
+        footer: "© 2026 Eyes Protector. Developed by ENIGM.",
+        btn: "العربية",
+        dir: "ltr"
+      },
+      ar: {
+        title: "احمِ نظرك يومياً",
+        subtitle: "تنبيهات مسافة ذكية لمنع إجهاد العين والحفاظ على عادات استخدام صحية للشاشة.",
+        download: "تحميل ملف APK المباشر",
+        counter: "التنزيلات",
+        safe: "مسافة آمنة",
+        warn: "تنبيه تحذيري",
+        danger: "قريب جداً",
+        screenshots: "لقطات الشاشة",
+        footer: "© 2026 Eyes Protector. تم التطوير بواسطة ENIGM.",
+        btn: "English",
+        dir: "rtl"
+      }
+    };
+
+    function toggleLanguage() {
+      currentLang = currentLang === 'en' ? 'ar' : 'en';
+      const t = translations[currentLang];
+      
+      document.documentElement.dir = t.dir;
+      document.getElementById('txt-title').innerText = t.title;
+      document.getElementById('txt-subtitle').innerText = t.subtitle;
+      document.getElementById('txt-download').innerText = t.download;
+      document.getElementById('txt-counter').innerText = t.counter;
+      document.getElementById('txt-status-safe').innerText = t.safe;
+      document.getElementById('txt-status-warn').innerText = t.warn;
+      document.getElementById('txt-status-danger').innerText = t.danger;
+      document.getElementById('txt-screenshots').innerText = t.screenshots;
+      document.getElementById('txt-footer').innerText = t.footer;
+      document.getElementById('lang-btn').innerText = t.btn;
+
+      const screenshotsSec = document.querySelector('section');
+      screenshotsSec.className = currentLang === 'ar' ? 'mt-16 text-right' : 'mt-16 text-left';
+    }
+
+    // --- 2. PERSISTENT COUNTER (API + LocalStorage Sync) ---
+    const counterName = "eyes_protector_hassan_app_2026";
     const countEl = document.getElementById("download-count");
     const downloadBtn = document.getElementById("download-btn");
 
-    // 1. Fetch current download count on page load
-    fetch(`https://counterapi.com/api/${counterKey}`)
-      .then(res => res.json())
-      .then(data => {
-        countEl.innerText = data.value || 0;
-      })
-      .catch(() => {
-        countEl.innerText = "0";
-      });
+    function updateDisplay(val) {
+      countEl.innerText = val;
+    }
 
-    // 2. Increment count on button click
-    downloadBtn.addEventListener("click", () => {
-      fetch(`https://counterapi.com/api/${counterKey}/up`)
+    function initCounter() {
+      let savedCount = parseInt(localStorage.getItem("ep_dl_val") || "0");
+      updateDisplay(savedCount);
+
+      fetch(`https://api.counterapi.dev/v1/${counterName}/downloads`)
         .then(res => res.json())
         .then(data => {
-          if (data && data.value) {
-            countEl.innerText = data.value;
+          if (data && data.count !== undefined) {
+            let serverCount = data.count;
+            let highest = Math.max(savedCount, serverCount);
+            localStorage.setItem("ep_dl_val", highest);
+            updateDisplay(highest);
           }
         })
-        .catch(err => console.error("Counter error:", err));
+        .catch(() => {
+          updateDisplay(savedCount);
+        });
+    }
+
+    downloadBtn.addEventListener("click", () => {
+      let newCount = parseInt(localStorage.getItem("ep_dl_val") || "0") + 1;
+      localStorage.setItem("ep_dl_val", newCount.toString());
+      updateDisplay(newCount);
+
+      fetch(`https://api.counterapi.dev/v1/${counterName}/downloads/up`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.count !== undefined) {
+            let finalVal = Math.max(newCount, data.count);
+            localStorage.setItem("ep_dl_val", finalVal);
+            updateDisplay(finalVal);
+          }
+        })
+        .catch(err => console.log("Count stored locally:", err));
     });
+
+    initCounter();
   </script>
 </body>
 </html>
