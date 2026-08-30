@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eyes Protector - Smart Distance Alerts</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 antialiased min-h-screen flex flex-col justify-between">
+
+  <header class="p-6 max-w-5xl mx-auto w-full flex justify-between items-center">
+    <div class="flex items-center gap-2">
+      <span class="text-2xl">👁️</span>
+      <h1 class="text-xl font-bold tracking-wide">Eyes Protector</h1>
+    </div>
+    <div class="bg-slate-900 border border-slate-800 text-slate-300 px-4 py-1.5 rounded-full text-xs font-mono">
+      Downloads: <span id="download-count" class="text-indigo-400 font-bold">...</span>
+    </div>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-6 py-16 text-center my-auto">
+    <h2 class="text-4xl sm:text-6xl font-extrabold tracking-tight mb-6">
+      Protect your eyes while using your phone.
+    </h2>
+    <p class="text-slate-400 text-lg sm:text-xl max-w-xl mx-auto mb-10">
+      Eyes Protector monitors your screen viewing distance in real time and alerts you when you get too close, preventing eye strain effortlessly.
+    </p>
+
+    <a 
+      id="download-btn"
+      href="eyes_protector_v1.0.0.apk" 
+      download 
+      class="inline-flex items-center gap-3 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-lg px-8 py-4 rounded-2xl shadow-lg shadow-indigo-600/30 transition duration-200 transform hover:-translate-y-0.5 active:translate-y-0"
+    >
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+      </svg>
+      Download Direct APK
+    </a>
+  </main>
+
+  <footer class="py-6 text-center text-xs text-slate-600 border-t border-slate-900">
+    © 2026 Eyes Protector. Designed by ENIGM.
+  </footer>
+
+  <script>
+    // Replace with a unique workspace/key name for your app
+    const counterKey = "eyes_protector_apk_downloads_2026";
+    const countEl = document.getElementById("download-count");
+    const downloadBtn = document.getElementById("download-btn");
+
+    // 1. Fetch current download count on page load
+    fetch(`https://counterapi.com/api/${counterKey}`)
+      .then(res => res.json())
+      .then(data => {
+        countEl.innerText = data.value || 0;
+      })
+      .catch(() => {
+        countEl.innerText = "0";
+      });
+
+    // 2. Increment count on button click
+    downloadBtn.addEventListener("click", () => {
+      fetch(`https://counterapi.com/api/${counterKey}/up`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.value) {
+            countEl.innerText = data.value;
+          }
+        })
+        .catch(err => console.error("Counter error:", err));
+    });
+  </script>
+</body>
+</html>
