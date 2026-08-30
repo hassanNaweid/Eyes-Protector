@@ -128,7 +128,7 @@
     </div>
   </footer>
 
-  <!-- Scripts: Language Switcher & Persistent Counter -->
+<!-- Scripts: Language Switcher & CountAPI -->
   <script>
     // --- 1. LANGUAGE TRANSLATIONS ---
     let currentLang = 'en';
@@ -181,8 +181,9 @@
       screenshotsSec.className = currentLang === 'ar' ? 'mt-16 text-right' : 'mt-16 text-left';
     }
 
-    // --- 2. PERSISTENT COUNTER (API + LocalStorage Sync) ---
-    const counterName = "eyes_protector_hassan_app_2026";
+    // --- 2. RELIABLE COUNTAPI SCRIPT ---
+    const namespace = "eyes_protector_app_hassan_2026";
+    const key = "downloads";
     const countEl = document.getElementById("download-count");
     const downloadBtn = document.getElementById("download-btn");
 
@@ -194,36 +195,37 @@
       let savedCount = parseInt(localStorage.getItem("ep_dl_val") || "0");
       updateDisplay(savedCount);
 
-      fetch(`https://api.counterapi.dev/v1/${counterName}/downloads`)
+      // Read live server count
+      fetch(`https://api.countapi.xyz/get/${namespace}/${key}`)
         .then(res => res.json())
         .then(data => {
-          if (data && data.count !== undefined) {
-            let serverCount = data.count;
+          if (data && data.value !== undefined) {
+            let serverCount = data.value;
             let highest = Math.max(savedCount, serverCount);
             localStorage.setItem("ep_dl_val", highest);
             updateDisplay(highest);
           }
         })
-        .catch(() => {
-          updateDisplay(savedCount);
-        });
+        .catch(err => console.log("CountAPI Sync Error:", err));
     }
 
     downloadBtn.addEventListener("click", () => {
-      let newCount = parseInt(localStorage.getItem("ep_dl_val") || "0") + 1;
-      localStorage.setItem("ep_dl_val", newCount.toString());
-      updateDisplay(newCount);
+      // 1. Immediately increment local UI state
+      let localCount = parseInt(localStorage.getItem("ep_dl_val") || "0") + 1;
+      localStorage.setItem("ep_dl_val", localCount.toString());
+      updateDisplay(localCount);
 
-      fetch(`https://api.counterapi.dev/v1/${counterName}/downloads/up`)
+      // 2. Increment remote counter
+      fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
         .then(res => res.json())
         .then(data => {
-          if (data && data.count !== undefined) {
-            let finalVal = Math.max(newCount, data.count);
+          if (data && data.value !== undefined) {
+            let finalVal = Math.max(localCount, data.value);
             localStorage.setItem("ep_dl_val", finalVal);
             updateDisplay(finalVal);
           }
         })
-        .catch(err => console.log("Count stored locally:", err));
+        .catch(err => console.log("Increment Sync Error:", err));
     });
 
     initCounter();
